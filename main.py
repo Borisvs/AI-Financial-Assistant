@@ -75,6 +75,22 @@ print(tabulate(hotdf.values.tolist()[:5], hotdf.columns.tolist(), tablefmt="psql
 print(tabulate(hotdf.values.tolist()[-5:], hotdf.columns.tolist(), tablefmt="psql"))
 
 # AI CHATBOT ###########################################################################################################
+
+# Training of the AI chatbot model
+
+assistant_AI = GenericAssistant('intents.json', intent_methods=intents_mapping,
+                                model_name="AI_Financial_Assistant_model")
+# 1st time initialization of the model
+assistant_AI.train_model()
+assistant_AI.save_model()
+# After first initialization (load model instead)
+assistant_AI.load_model(model_name="AI_Financial_Assistant_model")
+
+while True:
+    message = input("")
+    assistant_AI.request(message)  # Ask something to the assistant
+
+
 portfolio = {}
 with open('portfolio.pkl', 'wb') as f:
     pickle.dump(portfolio, f)
@@ -201,15 +217,3 @@ intents_mapping = {
     'user_help': user_help,
 
 }
-# Training of the AI chatbot model
-
-assistant_AI = GenericAssistant('intents.json', intent_methods=intents_mapping,
-                                model_name="AI_Financial_Assistant_model")
-# 1st time initialization of the model
-#assistant_AI.train_model()
-#assistant_AI.save_model()
-assistant_AI.load_model(model_name="AI_Financial_Assistant_model")
-
-while True:
-    message = input("")
-    assistant_AI.request(message)  # Ask something to the assistant
